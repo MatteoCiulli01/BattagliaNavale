@@ -1,6 +1,6 @@
 package ClassiServer;
 
-public class Coordinate 
+public class Coordinate
 {
     private int x;
     private int y;
@@ -28,12 +28,20 @@ public class Coordinate
     {
         this.inserita = true;
     }
-    public int getx()
+    public int getx()throws Exception
     {
+        if(x < 21 || x < 0 )
+        {
+            throw new Exception("coordinate x non vaide");
+        }
         return this.x;
     }
-    public int gety()
+    public int gety()throws Exception
     {
+        if(y < 21 || y < 0 )
+        {
+            throw new Exception("coordinate y non vaide");
+        }
         return this.y;
     }
     public void setX(int x) throws Exception 
