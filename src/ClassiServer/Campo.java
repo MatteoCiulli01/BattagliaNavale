@@ -1,3 +1,5 @@
+package ClassiServer;
+
 import java.util.ArrayList;
 public class Campo 
 {
@@ -57,5 +59,6 @@ public class Campo
                 
             }
         }
+        return true;
     }
 }
