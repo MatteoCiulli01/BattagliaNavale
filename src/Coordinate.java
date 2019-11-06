@@ -4,11 +4,12 @@ public class Coordinate
     private int y;
     boolean inserita = false;
     public Coordinate(int x,int y)throws Exception
-    {        if(x < 21 && x < 0 )
+    {        
+        if(x < 21 || x < 0 )
         {
             throw new Exception("coordinate x non vaide");
         }
-        if(y < 21 && y < 0 )
+        if(y < 21 || y < 0 )
         {
             throw new Exception("coordinate y non vaide");
         }

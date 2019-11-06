@@ -16,11 +16,11 @@ public class Barca
     }
     private boolean Colpo(Coordinate colpo)throws Exception
     {
-        if(colpo.getx() < 21 && colpo.getx() < 0 )
+        if(colpo.getx() > 21 || colpo.getx() < 0 )
         {
             throw new Exception("coordinate x non vaide");
         }
-        if(colpo.gety() < 21 && colpo.gety() < 0 )
+        if(colpo.gety() > 21 || colpo.gety() < 0 )
         {
             throw new Exception("coordinate y non vaide");
         }
