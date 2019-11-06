@@ -50,13 +50,13 @@ public class Campo
         Campo[x][y] = NewState;
         return NewState;
     }
-    public boolean riempi()
+    public boolean riempi() throws Exception
     {
         for(int i = 0; i < Barche.size(); i++)
         {
             for(int j = 0; j < Barche.get(i).Coordinate.size(); j++)
             {
-                
+                Campo[Barche.get(i).Coordinate.get(j).getx()][Barche.get(i).Coordinate.get(j).gety()]='B';
             }
         }
         return true;
