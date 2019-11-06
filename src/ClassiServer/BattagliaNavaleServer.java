@@ -14,16 +14,18 @@ import java.util.concurrent.Executors;
  *
  * Server -> Client
  *     BENVENUTO <char>!
- *     VALID_MOVE MOSSA VALIDA
- *     OTHER_PLAYER_MOVED IL TUO AVVERSARIO HA COLPITO <n>
- *     OTHER_PLAYER_LEFT L'AVVERSARIO HA LASCIATO LA PARTITA
- *     VICTORY VITTORIA, BEN FATTO <char> MA HAI VINTO LA BATTAGLIA NON LA GUERRA!
- *     SCONFITTA, DAVVERO UN PECCATO <char> ALLA BASE PRENDERANNO SERI PROVVEDIMENTI.
+ *     MOSSA VALIDA
+ *     IL TUO AVVERSARIO HA COLPITO <n>
+ *     L'AVVERSARIO HA LASCIATO LA PARTITA...
+ *     VITTORIA, BEN FATTO SOLDATO MA HAI VINTO LA BATTAGLIA NON LA GUERRA!
+ *     SCONFITTA, DAVVERO UN PECCATO SOLDATO, ALLA BASE PRENDERANNO SERI PROVVEDIMENTI.
  *     MESSAGGIO <text>
  */
 
 public class BattagliaNavaleServer {
     public static void main(String[] args) throws IOException {
+        
+        // Inizializzo Connessione
         try (ServerSocket listener = new ServerSocket(56789)) {
             System.out.println("INIZIALIZZO LA BATTAGLIA...");
             ExecutorService pool = Executors.newFixedThreadPool(200);
@@ -37,11 +39,13 @@ public class BattagliaNavaleServer {
 }
 
 class Gioco {
-    // Board cells numbered 0-8, top to bottom, left to right; null if empty
+    
+    // Processi relativi al campo di gioco con relative condizioni
+    
     private Giocatore[] campo = new Giocatore[9];
-
     Giocatore giocatoreCorrente;
-
+    
+    // Condizioni per la vincita di un giocatore
     public boolean Vincita() {                  /* Da gestire */
         return (campo[0] != null && campo[0] == campo[1] && campo[0] == campo[2])
             || (campo[3] != null && campo[3] == campo[4] && campo[3] == campo[5])
@@ -54,10 +58,12 @@ class Gioco {
         );
     }
 
+    // Riempimento caselle campo
     public boolean riempimentoCampo() {                 /*Da gestire*/
         return Arrays.stream(campo).allMatch(p -> p != null);
     }
 
+    // Gestione scelta mossa di un client
     public synchronized void mossa(int casella, Giocatore player) {                 /*Da gestire*/
         if (player != giocatoreCorrente) {
             throw new IllegalStateException("Non è il tuo turno ancora...");
@@ -71,9 +77,9 @@ class Gioco {
     }
 
     /**
-     * A Player is identified by a character mark which is either 'X' or 'O'.
-     * For communication with the client the player has a socket and associated
-     * Scanner and PrintWriter.
+     * Un giocatore è identificato da un identificativo ovvero "Giocatore 1" o "Giocatore 2"
+     * Per la comunicazione col client il giocatore ha attributi associati ovvero:
+     * - La sua Socket - Scanner(input) - PrintWriter(output)
      */
     class Giocatore implements Runnable {
         String id;
@@ -87,6 +93,7 @@ class Gioco {
             this.id = id;
         }
 
+        // classe run per gestire la connessione tra le socket dei due client
         @Override
         public void run() {
             try {
@@ -102,6 +109,7 @@ class Gioco {
             }
         }
 
+        // Inizializzazione connessione con relativi messaggi
         private void setup() throws IOException {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
@@ -116,6 +124,7 @@ class Gioco {
             }
         }
 
+        // Comandi per output duranti i processi
         private void processCommands() {                    /*Da gestire*/
             while (input.hasNextLine()) {
                 String command = input.nextLine();
@@ -127,14 +136,15 @@ class Gioco {
             }
         }
 
+        // Gestione processi durante la mossa relativa e scelta dal giocatore
         private void gestioneProcessiMossa(int casella) {                      /*Da gestire*/
             try {
                 mossa(casella, this);
-                output.println("VALID_MOVE");
+                output.println("MOSSA VALIDA");
                 avversario.output.println("OPPONENT_MOVED " + casella);
                 if (Vincita()) {
-                    output.println("VICTORY");
-                    avversario.output.println("DEFEAT");
+                    output.println("VITTORIA, BEN FATTO SOLDATO MA HAI VINTO LA BATTAGLIA NON LA GUERRA!");
+                    avversario.output.println("SCONFITTA, DAVVERO UN PECCATO SOLDATO, ALLA BASE PRENDERANNO SERI PROVVEDIMENTI.");
                 }
             } catch (IllegalStateException e) {
                 output.println("MESSAGGIO " + e.getMessage());
