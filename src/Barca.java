@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 public class Barca 
 {
-    private ArrayList<Coordinate> Coordinate;
+    public ArrayList<Coordinate> Coordinate;
     private int puntivita;
     private boolean affondata;
     public Barca(int PV,ArrayList<Coordinate> Coordinate1)throws Exception
