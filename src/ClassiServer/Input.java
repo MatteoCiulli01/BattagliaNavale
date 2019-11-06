@@ -4,6 +4,7 @@ import java.util.*;
 public class Input 
 {
     Coordinate c = new Coordinate();
+    Barca b = new Barca();
     
     public int x() throws Exception
     {
@@ -21,5 +22,17 @@ public class Input
     c.setY(y);
     return y;
     }
+    public int PV() throws Exception
+    {
+    int pv;
+    Scanner myObj = new Scanner(System.in);  
+    pv = myObj.nextInt();
+    b.setPuntivita(pv);
+    return pv;
+    }
     
+    public void change_state()
+    {
+       b.getPuntivita()
+    }
 }

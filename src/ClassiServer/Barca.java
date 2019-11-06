@@ -6,6 +6,9 @@ public class Barca
     public ArrayList<Coordinate> Coordinate;
     private int puntivita;
     private boolean affondata;
+    
+    public Barca()
+    {}
     public Barca(int PV,ArrayList<Coordinate> Coordinate1)throws Exception
     {
         if(PV >= 0 && Coordinate1.size() > 0)
@@ -42,5 +45,25 @@ public class Barca
             return false;
         }
         
+    }
+
+    public ArrayList<Coordinate> getCoordinate() {
+        return Coordinate;
+    }
+
+    public int getPuntivita() {
+        return puntivita;
+    }
+
+    public boolean isAffondata() {
+        return affondata;
+    }
+
+    public void setCoordinate(ArrayList<Coordinate> Coordinate) {
+        this.Coordinate = Coordinate;
+    }
+
+    public void setPuntivita(int puntivita) {
+        this.puntivita = puntivita;
     }
 }
