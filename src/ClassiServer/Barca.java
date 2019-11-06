@@ -1,3 +1,5 @@
+package ClassiServer;
+
 import java.util.ArrayList;
 public class Barca 
 {
@@ -8,7 +10,7 @@ public class Barca
     {
         if(PV >= 0 && Coordinate1.size() > 0)
         {
-            throw new Exception("input n1on vaido");
+            throw new Exception("input non vaido");
         }
         this.puntivita = PV;
         this.Coordinate = Coordinate1;
@@ -16,11 +18,11 @@ public class Barca
     }
     private boolean Colpo(Coordinate colpo)throws Exception
     {
-        if(colpo.getx() < 21 && colpo.getx() < 0 )
+        if(colpo.getx() > 21 ||  colpo.getx() < 0 )
         {
             throw new Exception("coordinate x non vaide");
         }
-        if(colpo.gety() < 21 && colpo.gety() < 0 )
+        if(colpo.gety() > 21 ||  colpo.gety() < 0 )
         {
             throw new Exception("coordinate y non vaide");
         }
