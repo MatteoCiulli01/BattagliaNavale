@@ -6,19 +6,17 @@ public class Input
     Coordinate c = new Coordinate();
     Barca b = new Barca();
     
-    public int x() throws Exception
+    public int x(int v) throws Exception
     {
     int x;
-    Scanner myObj = new Scanner(System.in);  
-    x = myObj.nextInt();
+    x = v;
     c.setX(x);
     return x;
     }
-    public int y() throws Exception
+    public int y(int v) throws Exception
     {
     int y;
-    Scanner myObj = new Scanner(System.in);  
-    y = myObj.nextInt();
+    y= v;
     c.setY(y);
     return y;
     }
@@ -33,6 +31,6 @@ public class Input
     
     public void change_state()
     {
-       b.getPuntivita()
+       b.getPuntivita();
     }
 }

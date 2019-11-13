@@ -1,3 +1,5 @@
+package ClassiServer;
+
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -40,14 +42,14 @@ public class BattagliaNavaleClient {
     private JFrame frame = new JFrame("Tic Tac Toe");
     private JLabel messageLabel = new JLabel("...");
 
-    private Square[] board = new Square[9];
+    private Square[] board = new Square[21]; //campo di gioco
     private Square currentSquare;
 
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
 
-    public TicTacToeClient(String serverAddress) throws Exception {
+    public BattagliaNavaleClient(String serverAddress) throws Exception {
 
         socket = new Socket(serverAddress, 58901);
         in = new Scanner(socket.getInputStream());
@@ -56,7 +58,7 @@ public class BattagliaNavaleClient {
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
 
-        var boardPanel = new JPanel();
+        JPanel boardPanel = new JPanel();
         boardPanel.setBackground(Color.black);
         boardPanel.setLayout(new GridLayout(3, 3, 2, 2));
         for (int  i = 0; i < board.length; i++) {
@@ -146,7 +148,7 @@ public class BattagliaNavaleClient {
             System.err.println("Pass the server IP as the sole command line argument");
             return;
         }
-        TicTacToeClient client = new TicTacToeClient(args[0]);
+        BattagliaNavaleClient client = new BattagliaNavaleClient(args[0]);
         client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         client.frame.setSize(320, 320);
         client.frame.setVisible(true);

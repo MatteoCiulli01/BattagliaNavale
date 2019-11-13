@@ -1,3 +1,5 @@
+package ClassiServer;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -24,7 +26,7 @@ import java.util.concurrent.Executors;
 
 public class BattagliaNavaleServer {
     public static void main(String[] args) throws IOException {
-        try (ServerSocket listener = new ServerSocket(56789)) {
+        try (ServerSocket listener = new ServerSocket(58901)) {
             System.out.println("INIZIALIZZO LA BATTAGLIA...");
             ExecutorService pool = Executors.newFixedThreadPool(200);
             while (true) {
@@ -38,7 +40,7 @@ public class BattagliaNavaleServer {
 
 class Gioco {
     // Board cells numbered 0-8, top to bottom, left to right; null if empty
-    private Giocatore[] campo = new Giocatore[9];
+    private Giocatore[][] campo = new Giocatore[21][21];
 
     Giocatore giocatoreCorrente;
 
@@ -58,15 +60,15 @@ class Gioco {
         return Arrays.stream(campo).allMatch(p -> p != null);
     }
 
-    public synchronized void mossa(int casella, Giocatore player) {                 /*Da gestire*/
+    public synchronized void mossa(int x,int y, Giocatore player) {                 /*Da gestire*/
         if (player != giocatoreCorrente) {
             throw new IllegalStateException("Non è il tuo turno ancora...");
         } else if (player.avversario == null) {
             throw new IllegalStateException("Non hai ancora un avversario");
-        } else if (campo[casella] != null) {
+        } else if (campo[x][y] != null) {
             throw new IllegalStateException("Cella colpita in precedenza, riprova.");
         }
-        campo[casella] = giocatoreCorrente;
+        campo[x][y] = giocatoreCorrente;
         giocatoreCorrente = giocatoreCorrente.avversario;
     }
 
@@ -108,30 +110,44 @@ class Gioco {
             output.println("BENVENUTO " + id + "!");
             if (id == "Giocatore 1") {
                 giocatoreCorrente = this;
-                output.println("MESSAGGIO Aspetto l'avversario...");
+                output.println("Aspetto l'avversario...");
             } else {
                 avversario = giocatoreCorrente;
                 avversario.avversario = this;
-                avversario.output.println("MESSAGGIO Dammi le coordinate della casella che vuoi colpire");
+                avversario.output.println("Dammi le coordinate della casella che vuoi colpire");
             }
         }
 
         private void processCommands() {                    /*Da gestire*/
             while (input.hasNextLine()) {
-                String command = input.nextLine();
+               String command = input.nextLine();
+               String command1 = input.nextLine();
+               int x = 0;
+               int y = 0;
+                Input i =new Input();
+                try{
+                i.x(Integer.parseInt(command.substring(2)));
+                i.y(Integer.parseInt(command1.substring(2)));
+                }
+                catch(Exception e){
+                }
                 if (command.startsWith("USCITA")) {
                     return;
-                } else if (command.startsWith("MOSSA")) {
-                    gestioneProcessiMossa(Integer.parseInt(command.substring(5)));
+                } else if (command.startsWith("X") ) {
+                   x = Integer.parseInt(command.substring(2));
+                } else if (command.startsWith("Y") ) {
+                   y = Integer.parseInt(command1.substring(2));
                 }
-            }
-        }
+                 gestioneProcessiMossa(x,y);
+                }
+           }
+   
 
-        private void gestioneProcessiMossa(int casella) {                      /*Da gestire*/
+            private void gestioneProcessiMossa(int x, int y) {                     
             try {
-                mossa(casella, this);
+                mossa(x,y, this);
                 output.println("VALID_MOVE");
-                avversario.output.println("OPPONENT_MOVED " + casella);
+                avversario.output.println("OPPONENT_MOVED " + x+","+y);
                 if (Vincita()) {
                     output.println("VICTORY");
                     avversario.output.println("DEFEAT");
