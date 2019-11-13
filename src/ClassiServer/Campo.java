@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+/*import java.util.ArrayList;
 public class Campo 
 {
     private char [][] Campo;
@@ -18,15 +18,16 @@ public class Campo
             }
         }
     }
+    
     public char getCasella(int x,int y)throws Exception
     {
         if(x < 21 || x < 0 )
         {
-            throw new Exception("coordinate x non vaide");
+            throw new Exception("Coordinate x non vaide");
         }
         if(y < 21 || y < 0 )
         {
-            throw new Exception("coordinate y non vaide");
+            throw new Exception("Coordinate y non vaide");
         }
         return Campo[x][y];
     }
@@ -35,19 +36,20 @@ public class Campo
     {
         if(x < 21 || x < 0 )
         {
-            throw new Exception("coordinate x non vaide");
+            throw new Exception("Coordinate x non vaide");
         }
         if(y < 21 || y < 0 )
         {
-            throw new Exception("coordinate y non vaide");
+            throw new Exception("Coordinate y non vaide");
         }
         if (NewState != 'B' && NewState != 'X')
         {
-            throw new Exception("stato non vaide");
+            throw new Exception("Stato non valido");
         }
         Campo[x][y] = NewState;
         return NewState;
     }
+    
     public boolean riempi()
     {
         for(int i = 0; i < Barche.size(); i++)
@@ -59,3 +61,4 @@ public class Campo
         }
     }
 }
+*/

@@ -1,3 +1,6 @@
+package ClassiServer;
+
+import java.lang.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
@@ -26,7 +29,7 @@ public class BattagliaNavaleServer {
     public static void main(String[] args) throws IOException {
         
         // Inizializzo Connessione
-        try (ServerSocket listener = new ServerSocket(56789)) {
+        try (ServerSocket listener = new ServerSocket(58902)) {
             System.out.println("INIZIALIZZO LA BATTAGLIA...");
             ExecutorService pool = Executors.newFixedThreadPool(200);
             while (true) {
@@ -41,9 +44,17 @@ public class BattagliaNavaleServer {
 class Gioco {
     
     // Processi relativi al campo di gioco con relative condizioni
-    
-    private Giocatore[] campo = new Giocatore[9];
+    private int Scelta;
+    private Giocatore[] campo = new Giocatore[21];
     Giocatore giocatoreCorrente;
+    
+    public int Opzioni() {
+        System.out.println("Con quale dei seguenti protocolli desideri procedere? (inserire il numero corrispondente)");
+        System.out.println("   1) Mostra campo personale; ");
+        System.out.println("   2) Colpisci casella avversaria;");
+        System.out.println("   3) Getta la spugna;");
+        
+    }
     
     // Condizioni per la vincita di un giocatore
     public boolean Vincita() {                  /* Da gestire */
@@ -116,11 +127,11 @@ class Gioco {
             output.println("BENVENUTO " + id + "!");
             if (id == "Giocatore 1") {
                 giocatoreCorrente = this;
-                output.println("MESSAGGIO Aspetto l'avversario...");
+                output.println("Aspetto l'avversario...");
             } else {
                 avversario = giocatoreCorrente;
                 avversario.avversario = this;
-                avversario.output.println("MESSAGGIO Dammi le coordinate della casella che vuoi colpire");
+                avversario.output.println("Dammi le coordinate della casella che vuoi colpire");
             }
         }
 
