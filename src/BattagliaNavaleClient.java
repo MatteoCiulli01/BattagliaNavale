@@ -29,17 +29,18 @@ import javax.swing.JPanel;
  *     MESSAGGIO <text>
  */
 
+
 public class BattagliaNavaleClient {
 
     private JFrame frame = new JFrame("Battaglia Navale");
     private JLabel messageLabel = new JLabel("...");
 
     private Tavola[] campo = new Tavola[9];                 /*Da gestire*/
-    private Tavola tavolaCorrente
+    private Tavola casellaCorrente;
 
     private Socket socket;
-    private Scanner input;
-    private PrintWriter output;
+    private Scanner in;
+    private PrintWriter out;
 
     public BattagliaNavaleClient(String serverAddress) throws Exception {
 
@@ -50,66 +51,54 @@ public class BattagliaNavaleClient {
         messageLabel.setBackground(Color.lightGray);
         frame.getContentPane().add(messageLabel, BorderLayout.SOUTH);
 
-        var boardPanel = new JPanel();
-        boardPanel.setBackground(Color.black);
-        boardPanel.setLayout(new GridLayout(3, 3, 2, 2));
-        for (int  i = 0; i < board.length; i++) {
+        JPanel campoPanel = new JPanel();
+        campoPanel.setBackground(Color.black);
+        campoPanel.setLayout(new GridLayout(3, 3, 2, 2));
+        for (int  i = 0; i < campo.length; i++) {                   /*Da gestire*/
             final int j = i;
-            board[i] = new Square();
-            board[i].addMouseListener(new MouseAdapter() {
+            campo[i] = new Tavola();
+            campo[i].addMouseListener(new MouseAdapter() {
                 public void mousePressed(MouseEvent e) {
-                    currentSquare = board[j];
+                    casellaCorrente = campo[j];
                     out.println("MOVE " + j);
                 }
             });
-            boardPanel.add(board[i]);
+            campoPanel.add(campo[i]);
         }
-        frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
+        frame.getContentPane().add(campoPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * The main thread of the client will listen for messages from the server.
-     * The first message will be a "WELCOME" message in which we receive our
-     * mark. Then we go into a loop listening for any of the other messages,
-     * and handling each message appropriately. The "VICTORY", "DEFEAT", "TIE",
-     *  and "OTHER_PLAYER_LEFT" messages will ask the user whether or not to
-     * play another game. If the answer is no, the loop is exited and the server
-     * is sent a "QUIT" message.
-     */
-    public void play() throws Exception {
+    public void Gioco() throws Exception {                  /*Da gestire*/
         try {
             String response = in.nextLine();
-            char mark = response.charAt(8);
-            char opponentMark = mark == 'X' ? 'O' : 'X';
-            frame.setTitle("Tic Tac Toe: Player " + mark);
+            char id = response.charAt(8);
+            char avversario = id == 'X' ? 'O' : 'X';
+            frame.setTitle("Tic Tac Toe: Player " + id);
             while (in.hasNextLine()) {
                 response = in.nextLine();
                 if (response.startsWith("VALID_MOVE")) {
                     messageLabel.setText("Valid move, please wait");
-                    currentSquare.setText(mark);
-                    currentSquare.repaint();
+                    casellaCorrente.setText(id);
+                    casellaCorrente.repaint();
                 } else if (response.startsWith("OPPONENT_MOVED")) {
                     int loc = Integer.parseInt(response.substring(15));
-                    board[loc].setText(opponentMark);
-                    board[loc].repaint();
-                    messageLabel.setText("Opponent moved, your turn");
-                } else if (response.startsWith("MESSAGE")) {
+                    campo[loc].setText(avversario);
+                    campo[loc].repaint();
+                    messageLabel.setText("Il nemico ha fatto la sua mossa, ora è il tuo turno");
+                } else if (response.startsWith("MESSSAGGIO")) {
                     messageLabel.setText(response.substring(8));
-                } else if (response.startsWith("VICTORY")) {
-                    JOptionPane.showMessageDialog(frame, "Winner Winner");
+                } else if (response.startsWith("VITTORIA, BEN FATTO SOLDATO MA HAI VINTO LA BATTAGLIA NON LA GUERRA!")) {
+                    JOptionPane.showMessageDialog(frame, "Vincitore");
                     break;
-                } else if (response.startsWith("DEFEAT")) {
-                    JOptionPane.showMessageDialog(frame, "Sorry you lost");
+                } else if (response.startsWith("SCONFITTA, DAVVERO UN PECCATO SOLDATO, ALLA BASE PRENDERANNO SERI PROVVEDIMENTI.")) {
+                    JOptionPane.showMessageDialog(frame, "Hai perso");
                     break;
-                } else if (response.startsWith("TIE")) {
-                    JOptionPane.showMessageDialog(frame, "Tie");
-                    break;
-                } else if (response.startsWith("OTHER_PLAYER_LEFT")) {
-                    JOptionPane.showMessageDialog(frame, "Other player left");
+                } else if (response.startsWith("L'AVVERSARIO HA LASCIATO LA PARTITA")) {
+                    JOptionPane.showMessageDialog(frame, "Connessione persa");
                     break;
                 }
             }
-            out.println("QUIT");
+            out.println("USCITA");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -119,17 +108,17 @@ public class BattagliaNavaleClient {
         }
     }
 
-    static class Square extends JPanel {
+    static class Tavola extends JPanel {
         JLabel label = new JLabel();
 
-        public Square() {
+        public Tavola() {
             setBackground(Color.white);
             setLayout(new GridBagLayout());
             label.setFont(new Font("Arial", Font.BOLD, 40));
             add(label);
         }
 
-        public void setText(char text) {
+        public void setText(char text) {                    /*Da gestire*/
             label.setForeground(text == 'X' ? Color.BLUE : Color.RED);
             label.setText(text + "");
         }
@@ -140,11 +129,11 @@ public class BattagliaNavaleClient {
             System.err.println("Pass the server IP as the sole command line argument");
             return;
         }
-        TicTacToeClient client = new TicTacToeClient(args[0]);
+        BattagliaNavaleClient client = new BattagliaNavaleClient(args[0]);                  
         client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         client.frame.setSize(320, 320);
         client.frame.setVisible(true);
         client.frame.setResizable(false);
-        client.play();
+        client.Gioco();
     }
 }
