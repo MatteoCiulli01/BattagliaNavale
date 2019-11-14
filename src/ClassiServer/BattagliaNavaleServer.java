@@ -93,7 +93,7 @@ class Gioco {
         public void run() {
             try {
                 setup();
-                processCommands();
+                gestioneProcessiMossa();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -118,33 +118,44 @@ class Gioco {
             }
         }
 
-        private void processCommands() {                    /*Da gestire*/
-            while (input.hasNextLine()) {
+        private int processCommandsX() {                    /*Da gestire*/
                String command = input.nextLine();
-               String command1 = input.nextLine();
-               int x = 0;
-               int y = 0;
-                Input i =new Input();
+                int x = 0;
+                Input i = new Input();
+                
                 try{
                 i.x(Integer.parseInt(command.substring(2)));
-                i.y(Integer.parseInt(command1.substring(2)));
                 }
                 catch(Exception e){
                 }
                 if (command.startsWith("USCITA")) {
-                    return;
+                    return -1;
                 } else if (command.startsWith("X") ) {
                    x = Integer.parseInt(command.substring(2));
+                }
+                return x;
+         }
+        private int processCommandsY(){
+                String command = input.nextLine();
+                int y = 0;  
+                Input i = new Input();
+                try{
+                i.y(Integer.parseInt(command.substring(2)));
+                }
+                catch(Exception e){
+                }
+                if (command.startsWith("USCITA")) {
+                    return -1;
                 } else if (command.startsWith("Y") ) {
-                   y = Integer.parseInt(command1.substring(2));
-                }
-                 gestioneProcessiMossa(x,y);
-                }
-           }
+                   y = Integer.parseInt(command.substring(2));
+                  }
+                return y;
+        }
    
-
-            private void gestioneProcessiMossa(int x, int y) {                     
+            private void gestioneProcessiMossa() {                     
             try {
+                int x = processCommandsX();
+                int y = processCommandsY();
                 mossa(x,y, this);
                 output.println("VALID_MOVE");
                 avversario.output.println("OPPONENT_MOVED " + x+","+y);
