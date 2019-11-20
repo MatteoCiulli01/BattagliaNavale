@@ -19,7 +19,9 @@ public class Campo
                 Campo[k][j] = 0;
             }
         }
+        this.riempi();
     }
+	
     public char getCasella(int x,int y)throws Exception
     {
         if(x < 21 || x < 0 )
@@ -54,11 +56,100 @@ public class Campo
     {
         for(int i = 0; i < Barche.size(); i++)
         {
-            for(int j = 0; j < Barche.get(i).Coordinate.size(); j++)
+            if(this.controllo(Barche.get(i)) == true)
             {
-                Campo[Barche.get(i).Coordinate.get(j).getx()][Barche.get(i).Coordinate.get(j).gety()]='B';
+                for(int j = 0; j < Barche.get(i).coordinate.size(); j++)
+                {
+                    Campo[Barche.get(i).coordinate.get(j).getx()][Barche.get(i).coordinate.get(j).gety()]='B';
+                }
+            }
+            else
+            {
+                Barche.remove(i);
             }
         }
         return true;
     }
+	public boolean controllo (Barca Barchetta) throws Exception
+	{
+		boolean first = false;
+		for(int i = 0; i < Barche.size() ; i++)
+		{
+			for ( int j = 0 ; j < Barche.get(i).coordinate.size(); j++)
+			{
+				for( int k = 0; k < Barchetta.coordinate.size(); k++)
+				{
+					if( Barchetta.coordinate.get(0).getx() == Barchetta.coordinate.get(Barchetta.coordinate.size()).getx())
+					{
+						if ( first == false)
+						{
+							if( Barchetta.coordinate.get(0).getx()-1 == Barche.get(j).coordinate.get(k).getx() && // x-1,y+1
+								Barchetta.coordinate.get(0).gety()+1 == Barche.get(j).coordinate.get(k).gety())
+								{ return false; }
+							if( Barchetta.coordinate.get(0).getx()-1 == Barche.get(j).coordinate.get(k).getx() && // x-1,y
+								Barchetta.coordinate.get(0).gety() == Barche.get(j).coordinate.get(k).gety())
+								{ return false; }
+							if( Barchetta.coordinate.get(0).getx()-1 == Barche.get(j).coordinate.get(k).getx() && // x-1,y-1
+								Barchetta.coordinate.get(0).gety()-1 == Barche.get(j).coordinate.get(k).gety())
+								{ return false; }
+							if( Barchetta.coordinate.get(Barchetta.coordinate.size()).getx()+1 == Barche.get(j).coordinate.get(k).getx() && // x+1,y+1
+								Barchetta.coordinate.get(0).gety()+1 == Barche.get(j).coordinate.get(k).gety())
+								{ return false; }
+							if( Barchetta.coordinate.get(Barchetta.coordinate.size()).getx()+1 == Barche.get(j).coordinate.get(k).getx() && // x+1,y
+								Barchetta.coordinate.get(0).gety() == Barche.get(j).coordinate.get(k).gety())
+								{ return false; }
+							if( Barchetta.coordinate.get(Barchetta.coordinate.size()).getx()+1 == Barche.get(j).coordinate.get(k).getx() && // x+1,y-1
+								Barchetta.coordinate.get(0).gety()-1 == Barche.get(j).coordinate.get(k).gety())
+								{ return false; }
+								first = true;
+						}
+						if( Barchetta.coordinate.get(k).getx() == Barche.get(j).coordinate.get(k).getx() && // x,y+1
+							Barchetta.coordinate.get(k).gety()+1 == Barche.get(j).coordinate.get(k).gety())
+							{ return false; }
+						if( Barchetta.coordinate.get(k).getx() == Barche.get(j).coordinate.get(k).getx() && // x,y
+							Barchetta.coordinate.get(k).gety() == Barche.get(j).coordinate.get(k).gety())
+							{ return false; }
+						if( Barchetta.coordinate.get(k).getx() == Barche.get(j).coordinate.get(k).getx() && // x,y-1
+							Barchetta.coordinate.get(k).gety()-1 == Barche.get(j).coordinate.get(k).gety())
+							{ return false; }
+					}
+					if( Barchetta.coordinate.get(0).gety() == Barchetta.coordinate.get(Barchetta.coordinate.size()).gety())
+					{						
+                                            if ( first == false)
+						{
+							if( Barchetta.coordinate.get(0).getx()+1 == Barche.get(j).coordinate.get(k).getx() && // x+1,y+1
+								Barchetta.coordinate.get(0).gety()+1 == Barche.get(j).coordinate.get(k).gety())
+								{ return false; }
+							if( Barchetta.coordinate.get(0).getx() == Barche.get(j).coordinate.get(k).getx() && // x,y+1
+								Barchetta.coordinate.get(0).gety()+1 == Barche.get(j).coordinate.get(k).gety())
+								{ return false; }
+							if( Barchetta.coordinate.get(0).getx()-1 == Barche.get(j).coordinate.get(k).getx() && // x-1,y+1
+								Barchetta.coordinate.get(0).gety()+1 == Barche.get(j).coordinate.get(k).gety())
+								{ return false ;}
+							if( Barchetta.coordinate.get(Barchetta.coordinate.size()).getx()+1 == Barche.get(j).coordinate.get(k).getx() && 
+								Barchetta.coordinate.get(Barchetta.coordinate.size()).gety()-1 == Barche.get(j).coordinate.get(k).gety())// x+1,y-1
+								{ return false;}
+							if( Barchetta.coordinate.get(Barchetta.coordinate.size()).getx() == Barche.get(j).coordinate.get(k).getx() && 
+								Barchetta.coordinate.get(Barchetta.coordinate.size()).gety()-1 == Barche.get(j).coordinate.get(k).gety())// x,y-1
+								{ return false; }
+							if( Barchetta.coordinate.get(Barchetta.coordinate.size()).getx()-1 == Barche.get(j).coordinate.get(k).getx() &&
+								Barchetta.coordinate.get(Barchetta.coordinate.size()).gety()-1 == Barche.get(j).coordinate.get(k).gety()) // x-1,y-1
+								{ return false; }
+								first = true;
+						}
+						if( Barchetta.coordinate.get(k).getx()+1 == Barche.get(j).coordinate.get(k).getx() && // x+1,y
+							Barchetta.coordinate.get(k).gety() == Barche.get(j).coordinate.get(k).gety())
+							{ return false; }
+						if( Barchetta.coordinate.get(k).getx() == Barche.get(j).coordinate.get(k).getx() && // x,y
+							Barchetta.coordinate.get(k).gety() == Barche.get(j).coordinate.get(k).gety())
+							{ return false; }
+						if( Barchetta.coordinate.get(k).getx()-1 == Barche.get(j).coordinate.get(k).getx() && // x-1,y
+							Barchetta.coordinate.get(k).gety() == Barche.get(j).coordinate.get(k).gety())
+							{ return false; }
+					}
+				}
+			}
+		}
+		return true;
+	}
 }

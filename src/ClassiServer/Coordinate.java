@@ -53,4 +53,16 @@ public class Coordinate
         }
         this.y = y;
     }
+    public int comparex(Coordinate other) throws Exception 
+    {
+            if(this.getx() > other.getx()) return 1; 
+            if(this.getx() < other.getx()) return -1;
+            else                   return 0;
+    }
+        public int comparey(Coordinate other) throws Exception 
+    {
+            if(this.gety() > other.gety()) return 1; 
+            if(this.gety() < other.gety()) return -1;
+            else                   return 0;
+    }
 }
