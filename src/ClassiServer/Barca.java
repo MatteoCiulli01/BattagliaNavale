@@ -2,6 +2,7 @@ package ClassiServer;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 public class Barca 
 {
     public ArrayList<Coordinate> coordinate;
@@ -21,34 +22,6 @@ public class Barca
         this.affondata = false;
         this.riempi();
     }
-    private boolean Colpo(Coordinate colpo)throws Exception
-    {
-        if(colpo.getx() > 21 ||  colpo.getx() < 0 )
-        {
-            throw new Exception("coordinate x non vaide");
-        }
-        if(colpo.gety() > 21 ||  colpo.gety() < 0 )
-        {
-            throw new Exception("coordinate y non vaide");
-        }
-        if (coordinate.contains(colpo))
-        {
-           int pos = coordinate.indexOf(colpo);
-           coordinate.get(pos).change_state();
-           puntivita--;
-           if(puntivita == 0)
-           {
-               affondata = true;
-           }
-           return true;
-        }
-        else
-        {
-            return false;
-        }
-        
-    }
-
     public ArrayList<Coordinate> getCoordinate() {
         return coordinate;
     }
@@ -82,7 +55,9 @@ public class Barca
                         coordinate.set(k, new Coordinate( iniziox, inizioy + j));
                         j++;
                     }
-                    //insert sortx here
+                   Comparator<Coordinate> x = new SortX();
+                   Collections.sort(coordinate, x);
+                   return true;
             }
             if( inizioy == finey)
             {
@@ -91,7 +66,13 @@ public class Barca
                     coordinate.set(k, new Coordinate( iniziox + j, inizioy));
                     j++;
                 }
-                Collections.sort(this.coordinate, new SortY());
+                Comparator<Coordinate> y = new SortY();
+                Collections.sort(coordinate, y);
+                return true;
             }
-}         
+            return false;
+        }
+        public void setAffondata(boolean aff) {
+        this.affondata = aff;
+    }
 }

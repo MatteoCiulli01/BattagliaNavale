@@ -152,4 +152,31 @@ public class Campo
 		}
 		return true;
 	}
+    private boolean Colpo(Coordinate colpo)throws Exception
+    {
+        if(colpo.getx() > 21 ||  colpo.getx() < 0 )
+        {
+            throw new Exception("coordinate x non vaide");
+        }
+        if(colpo.gety() > 21 ||  colpo.gety() < 0 )
+        {
+            throw new Exception("coordinate y non vaide");
+        }
+        for (int i = 0; i < Barche.size();i++)
+        {
+        if (Barche.get(i).coordinate.contains(colpo))
+        {
+           int pos = Barche.get(i).coordinate.indexOf(colpo);
+           Barche.get(i).coordinate.get(pos).change_state();
+           Barche.get(i).setPuntivita(Barche.get(i).getPuntivita()-1);
+           if(Barche.get(i).getPuntivita() == 0)
+           {
+               Barche.get(i).setAffondata(true);
+           }
+           this.change_state(Barche.get(i).coordinate.get(pos).getx(),Barche.get(i).coordinate.get(pos).gety(),'X');
+           return true;
+        }
+      }
+        return false;
+    }
 }

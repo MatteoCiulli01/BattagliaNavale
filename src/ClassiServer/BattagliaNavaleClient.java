@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.Scanner;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,8 +42,9 @@ public class BattagliaNavaleClient {
 
     private JFrame frame = new JFrame("Tic Tac Toe");
     private JLabel messageLabel = new JLabel("...");
-
-    private Square[] board = new Square[21]; //campo di gioco
+    
+    ArrayList<Barca> Barche;
+    private Campo board = new Campo(Barche); //campo di gioco
     private Square currentSquare;
 
     private Socket socket;
@@ -124,22 +126,6 @@ public class BattagliaNavaleClient {
         finally {
             socket.close();
             frame.dispose();
-        }
-    }
-
-    static class Square extends JPanel {
-        JLabel label = new JLabel();
-
-        public Square() {
-            setBackground(Color.white);
-            setLayout(new GridBagLayout());
-            label.setFont(new Font("Arial", Font.BOLD, 40));
-            add(label);
-        }
-
-        public void setText(char text) {
-            label.setForeground(text == 'X' ? Color.BLUE : Color.RED);
-            label.setText(text + "");
         }
     }
 

@@ -1,21 +1,19 @@
 package ClassiServer;
-import java.util.ArrayList; 
-import java.util.Collections;
-public class SortY implements Comparator<Coordinate> 
+import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+class SortY implements Comparator<Coordinate> 
 {
-    @Override public int comparey(Coordinate 1,Coordinate 2
-	(
-		if(1.gety() > 2.gety())
-		{
-			return +1;
-		}
-		if(1.gety() < 2.gety()
-		{
-			return -1;
-		}
-		if(1.gety() == 2.gety()
-		{
-			return 0;
-		}
+    public int compare(Coordinate v, Coordinate w)
+    {
+        try 
+        {
+            return v.comparey(w);
+        }
+        catch (Exception ex) 
+        {
+            Logger.getLogger(SortY.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return 0;
     }
 }
