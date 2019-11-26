@@ -29,38 +29,23 @@ public class BattagliaNavaleServer {
         try (ServerSocket listener = new ServerSocket(58901)) {
             System.out.println("INIZIALIZZO LA BATTAGLIA...");
             ExecutorService pool = Executors.newFixedThreadPool(200);
-            while (true) {
                 Gioco game = new Gioco();
                 pool.execute(game.new Giocatore(listener.accept(), "Giocatore 1"));
                 pool.execute(game.new Giocatore(listener.accept(), "Giocatore 2"));
             }
         }
     }
-}
+
 
 class Gioco {
-    // Board cells numbered 0-8, top to bottom, left to right; null if empty
-    private Giocatore[][] campo = new Giocatore[21][21];
 
     Giocatore giocatoreCorrente;
 
-    public boolean Vincita() {                  /* Da gestire */
-        return (campo[0] != null && campo[0] == campo[1] && campo[0] == campo[2])
-            || (campo[3] != null && campo[3] == campo[4] && campo[3] == campo[5])
-            || (campo[6] != null && campo[6] == campo[7] && campo[6] == campo[8])
-            || (campo[0] != null && campo[0] == campo[3] && campo[0] == campo[6])
-            || (campo[1] != null && campo[1] == campo[4] && campo[1] == campo[7])
-            || (campo[2] != null && campo[2] == campo[5] && campo[2] == campo[8])
-            || (campo[0] != null && campo[0] == campo[4] && campo[0] == campo[8])
-            || (campo[2] != null && campo[2] == campo[4] && campo[2] == campo[6]
-        );
-    }
-
-    public boolean riempimentoCampo() {                 /*Da gestire*/
+    public boolean riempimentoCampo(Campo[][] campo) {                
         return Arrays.stream(campo).allMatch(p -> p != null);
     }
 
-    public synchronized void mossa(int x,int y, Giocatore player) {                 /*Da gestire*/
+    public synchronized void mossa(int x,int y, Giocatore player,Campo[][] campo) {                
         if (player != giocatoreCorrente) {
             throw new IllegalStateException("Non è il tuo turno ancora...");
         } else if (player.avversario == null) {
@@ -68,18 +53,14 @@ class Gioco {
         } else if (campo[x][y] != null) {
             throw new IllegalStateException("Cella colpita in precedenza, riprova.");
         }
-        campo[x][y] = giocatoreCorrente;
         giocatoreCorrente = giocatoreCorrente.avversario;
     }
 
-    /**
-     * A Player is identified by a character mark which is either 'X' or 'O'.
-     * For communication with the client the player has a socket and associated
-     * Scanner and PrintWriter.
-     */
     class Giocatore implements Runnable {
         String id;
         Giocatore avversario;
+        private Campo[][] campo = new Campo[21][21];
+
         Socket socket;
         Scanner input;
         PrintWriter output;
@@ -88,12 +69,13 @@ class Gioco {
             this.socket = socket;
             this.id = id;
         }
-
+        
         @Override
         public void run() {
             try {
+                riempimentoCampo(campo);
                 setup();
-                gestioneProcessiMossa();
+                while(true)gestioneProcessiMossa();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -103,7 +85,8 @@ class Gioco {
                 try {socket.close();} catch (IOException e) {}
             }
         }
-
+        
+        
         private void setup() throws IOException {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
@@ -118,7 +101,7 @@ class Gioco {
             }
         }
 
-        private int processCommandsX() {                    /*Da gestire*/
+        private int processCommandsX() {                    
                String command = input.nextLine();
                 int x = 0;
                 Input i = new Input();
@@ -151,18 +134,23 @@ class Gioco {
                   }
                 return y;
         }
-   
+        
+
+             public void campo() {
+               String command = input.nextLine();
+                if(command.startsWith("campo"))
+                {
+                    output.println("Giocatore{" + "campo=" + campo + '}');
+                }
+        }
             private void gestioneProcessiMossa() {                     
             try {
+                campo();
                 int x = processCommandsX();
                 int y = processCommandsY();
-                mossa(x,y, this);
+                mossa(x,y, this,campo);
                 output.println("VALID_MOVE");
                 avversario.output.println("OPPONENT_MOVED " + x+","+y);
-                if (Vincita()) {
-                    output.println("VICTORY");
-                    avversario.output.println("DEFEAT");
-                }
             } catch (IllegalStateException e) {
                 output.println("MESSAGGIO " + e.getMessage());
             }

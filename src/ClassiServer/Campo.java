@@ -21,6 +21,10 @@ public class Campo
         }
         this.riempi();
     }
+
+    Campo() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 	
     public char getCasella(int x,int y)throws Exception
     {
@@ -179,4 +183,21 @@ public class Campo
       }
         return false;
     }
+    public boolean vinto()
+    {
+        int vittoria = 0;
+        for(int i = 0; i < Barche.size();i++)
+        {
+           if(Barche.get(i).isAffondata() == true)
+           {
+               vittoria++;
+           }
+        }
+        if (vittoria == 7)
+        {
+            return true;
+        }
+        return false;
+    }
 }
+
