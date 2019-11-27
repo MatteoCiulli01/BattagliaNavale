@@ -7,27 +7,16 @@ public class Campo
 {
     private char [][] Campo;
     ArrayList<Barca> Barche;
-    Campo(ArrayList<Barca> Barche1)throws Exception
+    Campo(ArrayList<Barca> Barche1)
     {
-        if (Barche1.size() != 7 )
-        {
-            throw new Exception("numero barche diverso da 7");
-        }
-        this.Barche = Barche1;
         for(int k = 0; k < 21; k++)
         {
             for(int j = 0; j < 21; j++)
             {
-                Campo[k][j] = 0;
+                Campo[k][j] = '0';
             }
         }
-        this.riempi();
-    }
-
-    Campo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-	
+    }	
     public char getCasella(int x,int y)throws Exception
     {
         if(x < 21 || x < 0 )
