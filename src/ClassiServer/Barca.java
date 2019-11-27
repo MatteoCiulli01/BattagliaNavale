@@ -13,7 +13,7 @@ public class Barca
     {}
     public Barca(int PV,ArrayList<Coordinate> Coordinate1)throws Exception
     {
-        if(PV >= 0 && Coordinate1.size() == 2)
+        if(PV >= 0 && Coordinate1.size() == 2 && PV <= 7)
         {
             throw new Exception("input non vaido");
         }

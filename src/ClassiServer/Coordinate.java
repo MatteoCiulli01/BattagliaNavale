@@ -7,9 +7,7 @@ public class Coordinate
     boolean inserita = false;
     
     public Coordinate()
-    {
-        
-    }
+    {}
     public Coordinate(int x,int y)throws Exception
     {   
         if(x > 21 ||  x < 0 )
