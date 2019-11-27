@@ -1,6 +1,8 @@
 package ClassiServer;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 public class Campo 
 {
     private char [][] Campo;
@@ -56,7 +58,7 @@ public class Campo
         Campo[x][y] = NewState;
         return NewState;
     }
-    public boolean riempi() throws Exception
+    public void riempi()throws Exception
     {
         for(int i = 0; i < Barche.size(); i++)
         {
@@ -72,7 +74,6 @@ public class Campo
                 Barche.remove(i);
             }
         }
-        return true;
     }
 	public boolean controllo (Barca Barchetta) throws Exception
 	{
@@ -196,6 +197,23 @@ public class Campo
         if (vittoria == 7)
         {
             return true;
+        }
+        return false;
+    }
+    public boolean aggiungibarca(Barca b)
+    {
+        try 
+        {
+            if(this.controllo(b)== true)
+            {
+                this.Barche.add(b);
+                this.riempi();
+                return true;
+            }
+        }
+        catch (Exception ex) 
+        {
+            Logger.getLogger(Campo.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
     }
