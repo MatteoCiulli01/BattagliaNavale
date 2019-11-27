@@ -61,8 +61,11 @@ public class Coordinate
     }
         public int comparey(Coordinate other) throws Exception 
     {
-            if(this.gety() > other.gety()) return 1; 
-            if(this.gety() < other.gety()) return -1;
-            else                   return 0;
+        if(this.gety() > other.gety()) 
+        {return 1;}
+        if(this.gety() < other.gety()) 
+        {return -1;}
+        else                   
+        {return 0;}
     }
 }

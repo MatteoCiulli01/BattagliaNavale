@@ -28,7 +28,7 @@ public class BattagliaNavaleServer {
     public static void main(String[] args) throws IOException {
         try (ServerSocket listener = new ServerSocket(58901)) {
             System.out.println("INIZIALIZZO LA BATTAGLIA...");
-            ExecutorService pool = Executors.newFixedThreadPool(200);
+            ExecutorService pool = Executors.newFixedThreadPool(2);
                 Gioco game = new Gioco();
                 pool.execute(game.new Giocatore(listener.accept(), "Giocatore 1"));
                 pool.execute(game.new Giocatore(listener.accept(), "Giocatore 2"));
@@ -41,9 +41,6 @@ class Gioco {
 
     Giocatore giocatoreCorrente;
 
-    public boolean riempimentoCampo(Campo[][] campo) {                
-        return Arrays.stream(campo).allMatch(p -> p != null);
-    }
 
     public synchronized void mossa(int x,int y, Giocatore player,Campo[][] campo) {                
         if (player != giocatoreCorrente) {
@@ -73,7 +70,6 @@ class Gioco {
         @Override
         public void run() {
             try {
-                riempimentoCampo(campo);
                 setup();
                 while(true)gestioneProcessiMossa();
             } catch (Exception e) {
@@ -145,7 +141,7 @@ class Gioco {
         }
             private void gestioneProcessiMossa() {                     
             try {
-                campo();
+ 
                 int x = processCommandsX();
                 int y = processCommandsY();
                 mossa(x,y, this,campo);

@@ -49,7 +49,7 @@ public class Campo
         {
             throw new Exception("coordinate y non vaide");
         }
-        if (NewState != 'B' && NewState != 'X')
+        if (NewState != 'B' && NewState != 'X' && NewState != 'A') 
         {
             throw new Exception("stato non vaide");
         }
